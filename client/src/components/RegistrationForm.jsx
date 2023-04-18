@@ -15,8 +15,36 @@ import { createRegistration } from '../api/registrations'
 // * REACT-ROUTER-DOM
 import { useNavigate } from 'react-router-dom'
 
+// * TOAST
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+
 function RegistrationForm () {
   const navigate = useNavigate()
+  const notify = () => {
+    toast.success('🎉 Registrado correctamente!', {
+      position: 'top-right',
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: 'dark'
+    })
+  }
+  const errorNotify = () => {
+    toast.error('💔 Menores de edad no pueden participar!', {
+      position: 'top-right',
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: 'dark'
+    })
+  }
 
   const addRegistrationMutation = useMutation({
     mutationFn: createRegistration,
@@ -26,6 +54,7 @@ function RegistrationForm () {
 
       window.alert('Registrado correctamente! 😀')
       navigate('/result')
+      // notify()
     },
     onError: (error) => {
       window.alert(error)
@@ -34,7 +63,8 @@ function RegistrationForm () {
 
   const onSubmit = async (values, actions) => {
     if (getCurrentAge(values.fecha_nacimiento) < 18) {
-      window.alert('Menores de 18 años no pueden participar 😥')
+      // window.alert('Menores de 18 años no pueden participar 😥')
+      errorNotify()
     } else {
       addRegistrationMutation.mutate({
         ...values,
@@ -126,6 +156,21 @@ function RegistrationForm () {
           <button disabled={isSubmitting} type='submit' className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 my-4'>
             Enviar
           </button>
+
+          <ToastContainer
+            theme='dark'
+            position='top-right'
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
+          {/* Same as */}
+          <ToastContainer />
         </Form>
       )}
     </Formik>

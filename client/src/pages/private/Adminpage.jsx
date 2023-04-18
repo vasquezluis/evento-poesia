@@ -25,6 +25,8 @@ function AdminPage ({ user }) {
             key={regis._id}
             carnet={regis.carnet}
             nombre={regis.nombre}
+            carrera={regis.carrera}
+            fechaNacimiento={regis.fecha_nacimiento}
             generoPoesia={regis.genero_poesia}
             fechaDeclamacion={regis.fecha_declamacion}
           />
