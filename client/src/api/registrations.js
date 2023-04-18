@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const registrationAPI = axios.create({
-  baseURL: 'http://localhost:3000/api/v1/registrations'
+  baseURL: 'https://poesia-evento-backend.onrender.com/api/v1/registrations'
 })
 
 export const getRegistrations = async () => {
