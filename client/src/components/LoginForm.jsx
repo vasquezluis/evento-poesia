@@ -1,16 +1,12 @@
 import './UserForm.css'
-import { getCurrentAge } from '../helpers/getCurrentAge'
 
 // * FORMIK / YUP
 import { Formik, Form } from 'formik'
-import { registrationsSchema } from '../schemas/registrationsSchema'
 import CustomInput from './CustomInput'
-import CustomSelect from './CustomSelect'
-import CustomDate from './CustomDate'
 
 // * REACT-QUERY
 import { useMutation } from 'react-query'
-import { createRegistration } from '../api/registrations'
+import { login } from '../api/users'
 
 // * REACT-ROUTER-DOM
 import { useNavigate } from 'react-router-dom'
@@ -18,38 +14,27 @@ import { useNavigate } from 'react-router-dom'
 function LoginForm () {
   const navigate = useNavigate()
 
-  const addRegistrationMutation = useMutation({
-    mutationFn: createRegistration,
+  const loginMutation = useMutation({
+    mutationFn: login,
     onSuccess: (data) => {
-      const fechaDeclamacion = data.data.body.fecha_declamacion
-      console.log(fechaDeclamacion)
+      window.localStorage.setItem('userData', JSON.stringify(data))
 
-      window.alert('Registrado correctamente! 😀')
-
-      navigate('/login')
+      navigate('/admin')
     },
     onError: (error) => {
-      window.alert(error)
+      console.log(error)
     }
   })
 
   const onSubmit = async (values, actions) => {
-    if (getCurrentAge(values.fecha_nacimiento) < 18) {
-      window.alert('Menores de 18 años no pueden participar 😥')
-    } else {
-      addRegistrationMutation.mutate({
-        ...values,
-        fecha_inscripcion: new Date().toISOString()
-      })
-    }
+    loginMutation.mutate({ user: values.user, password: values.password })
 
     actions.resetForm()
   }
 
   return (
     <Formik
-      initialValues={{ carnet: '', nombre: '', direccion: '', genero: '', telefono: '', fecha_nacimiento: '', carrera: '', genero_poesia: '' }}
-      validationSchema={registrationsSchema}
+      initialValues={{ user: '', password: '' }}
       onSubmit={onSubmit}
     >
       {({ isSubmitting }) => (
@@ -60,69 +45,18 @@ function LoginForm () {
           <h1 className='font-bold mb-3'>Login</h1>
 
           <CustomInput
-            label='Carnet'
-            name='carnet'
+            label='Usuario'
+            name='user'
             type='text'
-            placeholder='Introduce tu carnet'
+            placeholder='Introduce tu usuario'
           />
 
           <CustomInput
-            label='Nombre'
-            name='nombre'
-            type='text'
-            placeholder='Introduce tu nombre'
+            label='Contraseña'
+            name='password'
+            type='password'
+            placeholder='Introduce tu contraseña'
           />
-
-          <CustomInput
-            label='Direccion'
-            name='direccion'
-            type='text'
-            placeholder='Introduce tu dirección'
-          />
-
-          <CustomSelect
-            label='Género'
-            name='genero'
-            type='text'
-            placeholder='Selecciona tu género'
-          >
-            <option value=''>Selecciona tu género</option>
-            <option value='masculino'>Masculino</option>
-            <option value='femenino'>Femenino</option>
-          </CustomSelect>
-
-          <CustomInput
-            label='Teléfono'
-            name='telefono'
-            type='text'
-            placeholder='Introduce tu telefono'
-          />
-
-          <CustomDate
-            label='Fecha de nacimiento'
-            name='fecha_nacimiento'
-            type='date'
-            placeholder='Selecciona tu fecha de nacimiento'
-          />
-
-          <CustomInput
-            label='Carrera'
-            name='carrera'
-            type='text'
-            placeholder='Introduce tu carrera'
-          />
-
-          <CustomSelect
-            label='Género de poesía'
-            name='genero_poesia'
-            type='text'
-            placeholder='Selecciona el género de poesía'
-          >
-            <option value=''>Selecciona un género</option>
-            <option value='Lírica'>Lírica</option>
-            <option value='Épica'>Épica</option>
-            <option value='Dramática'>Dramática</option>
-          </CustomSelect>
 
           <button disabled={isSubmitting} type='submit' className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 my-4'>
             Enviar

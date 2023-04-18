@@ -21,12 +21,11 @@ function RegistrationForm () {
   const addRegistrationMutation = useMutation({
     mutationFn: createRegistration,
     onSuccess: (data) => {
-      const fechaDeclamacion = data.data.body.fecha_declamacion
-      console.log(fechaDeclamacion)
+      window.localStorage.removeItem('resultData')
+      window.localStorage.setItem('resultData', JSON.stringify(data.data.body))
 
       window.alert('Registrado correctamente! 😀')
-
-      navigate('/login')
+      navigate('/result')
     },
     onError: (error) => {
       window.alert(error)
@@ -57,7 +56,7 @@ function RegistrationForm () {
           className='w-[400px] bg-slate-800 p-5 rounded-md'
         >
 
-          <h1 className='font-bold mb-3'>Registro</h1>
+          <h1 className='font-bold mb-3'>Registro <span className='text-sm'>poesia</span></h1>
 
           <CustomInput
             label='Carnet'

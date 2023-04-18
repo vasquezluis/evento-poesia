@@ -1,10 +1,10 @@
 input.input-error,
 select.input-error {
-  border: 2px solid red;
+  border: 2px solid rgb(197, 124, 124);
 }
 
 .error {
-  color: red;
+  color: rgb(196, 131, 131);
 }
 
 button:disabled {
