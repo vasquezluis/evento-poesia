@@ -46,10 +46,8 @@ export const createRegistrations = async (body: Registrations) => {
     const validPoetry = isValidPoetry(userData.genero_poesia);
 
     if (validCard && validGender && currentAge > 17 && validPoetry) {
-      userData.fecha_nacimiento = new Date(
-        userData.fecha_nacimiento
-      ).toISOString();
-      userData.fecha_inscripcion = new Date().toISOString();
+      userData.fecha_nacimiento = new Date(userData.fecha_nacimiento);
+      userData.fecha_inscripcion = new Date();
       userData.active = true;
 
       // * create fecha_declamacion
@@ -57,16 +55,14 @@ export const createRegistrations = async (body: Registrations) => {
         userData.genero_poesia === "Dramática" &&
         userData.carnet[5] === "1"
       ) {
-        userData.fecha_declamacion = get5NextDays(new Date(), 5).toISOString();
+        userData.fecha_declamacion = get5NextDays(new Date(), 5);
       } else if (
         userData.carnet[5] == "3" &&
         userData.genero_poesia == "Épica"
       ) {
-        userData.fecha_declamacion = getLastBusinessDayOfMonth(
-          new Date()
-        ).toISOString();
+        userData.fecha_declamacion = getLastBusinessDayOfMonth(new Date());
       } else {
-        userData.fecha_declamacion = getFridayOfWeek(new Date()).toISOString();
+        userData.fecha_declamacion = getFridayOfWeek(new Date());
       }
 
       const response = await RegistrationModel.create(userData);

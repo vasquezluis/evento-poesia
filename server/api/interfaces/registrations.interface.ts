@@ -8,10 +8,10 @@ export interface Registrations {
   direccion: string;
   genero: string;
   telefono: string;
-  fecha_nacimiento: string;
+  fecha_nacimiento: any;
   carrera: string;
   genero_poesia: string;
-  fecha_inscripcion: string;
-  fecha_declamacion: string;
+  fecha_inscripcion: any;
+  fecha_declamacion: any;
   active: boolean;
 }
