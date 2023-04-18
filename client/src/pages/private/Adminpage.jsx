@@ -10,8 +10,8 @@ function AdminPage ({ user }) {
     error
   } = useQuery({
     queryKey: ['registrations'],
-    queryFn: getRegistrations,
-    select: (items) => items.reverse()
+    queryFn: getRegistrations
+    // select: (items) => items.reverse()
   })
 
   if (isLoading) return <div>Loading...</div>
