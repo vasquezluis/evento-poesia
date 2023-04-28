@@ -84,16 +84,16 @@ export const deleteItem = async (req: Request, res: Response) => {
   }
 };
 
-export const loginController = async (req: Request, res: Response) => {
-  try {
-    const { body } = req;
-    console.log(body)
-    const result = await login(body);
+// export const loginController = async (req: Request, res: Response) => {
+//   try {
+//     const { body } = req;
+//     console.log(body)
+//     const result = await login(body);
 
-    response.success(res, 200, `User data!`, result);
-  } catch (error) {
-    if (error instanceof Error) {
-      console.log(error.message);
-    }
-  }
-};
+//     response.success(res, 200, `User data!`, result);
+//   } catch (error) {
+//     if (error instanceof Error) {
+//       console.log(error.message);
+//     }
+//   }
+// };

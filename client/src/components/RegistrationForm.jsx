@@ -16,19 +16,18 @@ import { createRegistration } from '../api/registrations'
 import { useNavigate } from 'react-router-dom'
 
 // * TOAST
-import { ToastContainer, toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
+import { toast } from 'react-toastify'
 
 function RegistrationForm () {
   const navigate = useNavigate()
   const notify = () => {
     toast.success('🎉 Registrado correctamente!', {
       position: 'top-right',
-      autoClose: 5000,
+      autoClose: 3000,
       hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
+      closeOnClick: false,
+      pauseOnHover: false,
+      draggable: false,
       progress: undefined,
       theme: 'dark'
     })
@@ -36,11 +35,11 @@ function RegistrationForm () {
   const errorNotify = () => {
     toast.error('💔 Menores de edad no pueden participar!', {
       position: 'top-right',
-      autoClose: 5000,
+      autoClose: 3000,
       hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
+      closeOnClick: false,
+      pauseOnHover: false,
+      draggable: false,
       progress: undefined,
       theme: 'dark'
     })
@@ -49,12 +48,13 @@ function RegistrationForm () {
   const addRegistrationMutation = useMutation({
     mutationFn: createRegistration,
     onSuccess: (data) => {
+      notify()
+
       window.localStorage.removeItem('resultData')
       window.localStorage.setItem('resultData', JSON.stringify(data.data.body))
 
-      window.alert('Registrado correctamente! 😀')
+      // window.alert('Registrado correctamente! 😀')
       navigate('/result')
-      // notify()
     },
     onError: (error) => {
       window.alert(error)
@@ -157,20 +157,6 @@ function RegistrationForm () {
             Enviar
           </button>
 
-          <ToastContainer
-            theme='dark'
-            position='top-right'
-            autoClose={5000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-          />
-          {/* Same as */}
-          <ToastContainer />
         </Form>
       )}
     </Formik>
