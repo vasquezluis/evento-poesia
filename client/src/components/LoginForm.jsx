@@ -1,40 +1,108 @@
 import './UserForm.css'
+import { useEffect } from 'react'
 
 // * FORMIK / YUP
 import { Formik, Form } from 'formik'
+import { loginSchema } from '../schemas/loginSchema'
 import CustomInput from './CustomInput'
 
 // * REACT-QUERY
 import { useMutation } from 'react-query'
-import { login } from '../api/users'
+import { authFunction } from '../api/auth'
 
 // * REACT-ROUTER-DOM
 import { useNavigate } from 'react-router-dom'
 
+// * react-redux
+import { useDispatch, useSelector } from 'react-redux'
+import { setUser } from '../reducers/userSlice.js'
+import { getTokenFromLocalStorage } from '../libs/axios.js'
+
+// * TOAST
+import { toast } from 'react-toastify'
+
 function LoginForm () {
+  const dispatch = useDispatch()
   const navigate = useNavigate()
+  const user = useSelector((state) => state.user)
+
+  const notify = (user) => {
+    toast.success(`🎉 Bienvenido ${user}!`, {
+      position: 'top-right',
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: false,
+      progress: undefined,
+      theme: 'dark'
+    })
+  }
+  const errorNotify = (message) => {
+    toast.error(`💔 ${message}`, {
+      position: 'top-right',
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: false,
+      progress: undefined,
+      theme: 'dark'
+    })
+  }
+
+  useEffect(() => {
+    if (user && user.roles.includes('admin')) {
+      navigate('/admin')
+    }
+  }, [])
 
   const loginMutation = useMutation({
-    mutationFn: login,
-    onSuccess: (data) => {
-      window.localStorage.setItem('userData', JSON.stringify(data))
+    mutationFn: authFunction,
+    onSuccess: (data, variables, context) => {
+      notify(data.userData.user)
 
-      navigate('/admin')
+      // -> local storage from token
+      window.localStorage.setItem('loggedUser', JSON.stringify(data))
+
+      dispatch(setUser({
+        id: data.userData.id,
+        roles: data.userData.roles,
+        user: data.userData.user
+      }))
+
+      // * set token to axios operations
+      getTokenFromLocalStorage(`${data.token}`)
+
+      // * redirect
+      if (data.userData.roles.includes('admin')) {
+        navigate('/admin')
+      }
     },
-    onError: (error) => {
-      console.log(error)
+    onError: (error, variables, context) => {
+      if (error.response.status === 404) {
+        errorNotify('Usuario no encontrado')
+      }
+      if (error.response.status === 401) {
+        errorNotify('Contraseña incorrecta')
+      }
     }
   })
 
   const onSubmit = async (values, actions) => {
-    loginMutation.mutate({ user: values.user, password: values.password })
+    try {
+      loginMutation.mutate({ user: values.user, password: values.password })
 
-    actions.resetForm()
+      actions.resetForm()
+    } catch (error) {
+      console.log(error.message)
+    }
   }
 
   return (
     <Formik
       initialValues={{ user: '', password: '' }}
+      validationSchema={loginSchema}
       onSubmit={onSubmit}
     >
       {({ isSubmitting }) => (
@@ -61,8 +129,10 @@ function LoginForm () {
           <button disabled={isSubmitting} type='submit' className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 my-4'>
             Enviar
           </button>
+
         </Form>
       )}
+
     </Formik>
   )
 }
