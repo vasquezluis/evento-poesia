@@ -9,7 +9,7 @@ import authRoutes from "./api/routes/auth.routes";
 
 const app = express();
 app.use(express.json());
-app.use(cors({ origin: "https://evento-poesia.netlify.app/", credentials: true }));
+app.use(cors({ origin: "https://evento-poesia.netlify.app", credentials: true }));
 app.use(morgan("dev"));
 
 app.use(indexRoutes);
