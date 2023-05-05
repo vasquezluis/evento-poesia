@@ -12,7 +12,7 @@ function RegistrationCard ({ carnet, nombre, direccion, genero, telefono, fechaN
   })
 
   return (
-    <div className='p-2'>
+    <div className='p-1'>
       <div className='max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700'>
         <div className='flex justify-center'>
           <MdOutlineDateRange className='text-3xl' />
