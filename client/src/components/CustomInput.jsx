@@ -4,7 +4,7 @@ function CustomInput ({ label, ...props }) {
   const [field, meta] = useField(props)
 
   return (
-    <>
+    <div className='flex flex-col justify-start w-full'>
       <label
         className='block mb-2 text-sm font-medium text-gray-900 dark:text-white text-start'
         htmlFor=''
@@ -18,7 +18,7 @@ function CustomInput ({ label, ...props }) {
         ${meta.touched && meta.error ? 'input-error' : ''}`}
       />
       {meta.touched && meta.error && <div className='error'>{meta.error}</div>}
-    </>
+    </div>
   )
 }
 

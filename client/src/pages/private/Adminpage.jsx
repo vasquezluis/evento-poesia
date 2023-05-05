@@ -18,7 +18,7 @@ function AdminPage ({ user }) {
   if (isError) return <div>Error: {error.message}</div>
 
   return (
-    <div className='flex flex-wrap justify-center'>
+    <div className='flex flex-wrap justify-start'>
       {
         registrations.map((regis, index) => (
           <RegistrationCard

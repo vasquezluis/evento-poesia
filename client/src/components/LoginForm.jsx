@@ -1,5 +1,5 @@
 import './UserForm.css'
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 
 // * FORMIK / YUP
 import { Formik, Form } from 'formik'
@@ -21,10 +21,14 @@ import { getTokenFromLocalStorage } from '../libs/axios.js'
 // * TOAST
 import { toast } from 'react-toastify'
 
+// * CAPTCHA
+import ReCaptcha from './ReCaptcha'
+
 function LoginForm () {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const user = useSelector((state) => state.user)
+  const [captchaToken, setcaptchaToken] = useState('')
 
   const notify = (user) => {
     toast.success(`🎉 Bienvenido ${user}!`, {
@@ -90,13 +94,21 @@ function LoginForm () {
   })
 
   const onSubmit = async (values, actions) => {
-    try {
-      loginMutation.mutate({ user: values.user, password: values.password })
+    if (captchaToken) {
+      try {
+        loginMutation.mutate({ user: values.user, password: values.password })
 
-      actions.resetForm()
-    } catch (error) {
-      console.log(error.message)
+        actions.resetForm()
+      } catch (error) {
+        errorNotify(`${error.message}`)
+      }
+    } else {
+      errorNotify('😐 Captcha no resulto')
     }
+  }
+
+  const onChange = (token) => {
+    setcaptchaToken(token)
   }
 
   return (
@@ -125,6 +137,13 @@ function LoginForm () {
             type='password'
             placeholder='Introduce tu contraseña'
           />
+
+          <div className='flex justify-center'>
+            <ReCaptcha
+              sitekey='6LcfKeUlAAAAADjauxxmIz9QQSfRXIEkjQDPJje9'
+              onChange={onChange}
+            />
+          </div>
 
           <button disabled={isSubmitting} type='submit' className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 my-4'>
             Enviar
