@@ -79,7 +79,6 @@ function RegistrationForm() {
         });
       } else {
         errorNotify("Captcha no resulto 😐");
-        recaptchaRef.current.reset();
         setcaptchaToken(null);
       }
     }
@@ -183,6 +182,7 @@ function RegistrationForm() {
 
           <div className="flex flex-row gap-2 justify-around items-center">
             <ReCaptcha
+              // TODO this sitekey should be hidden in the future
               sitekey="6LcfKeUlAAAAADjauxxmIz9QQSfRXIEkjQDPJje9"
               onChange={onChange}
             />
