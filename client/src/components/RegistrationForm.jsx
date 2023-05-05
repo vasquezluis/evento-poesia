@@ -79,7 +79,6 @@ function RegistrationForm() {
         });
       } else {
         errorNotify("Captcha no resulto 😐");
-        recaptchaRef.current.reset();
         setcaptchaToken(null);
       }
     }
