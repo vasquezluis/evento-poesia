@@ -3,7 +3,8 @@ import axios from 'axios'
 // axios instance
 
 const authAPI = axios.create({
-  baseURL: 'http://localhost:3000/api/v1/auth'
+  // baseURL: 'http://localhost:3000/api/v1/auth',
+  baseURL: 'https://evento-poesia.onrender.com/api/v1/auth'
 })
 
 /**
