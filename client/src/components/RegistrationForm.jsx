@@ -1,6 +1,7 @@
 import './UserForm.css'
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import { getCurrentAge } from '../helpers/getCurrentAge'
+import PopOver from './PopOver'
 
 // * FORMIK / YUP
 import { Formik, Form } from 'formik'
@@ -21,9 +22,11 @@ import { toast } from 'react-toastify'
 
 // * CAPTCHA
 import ReCaptcha from './ReCaptcha'
+import Exclamations from './icons/Exclamations'
 
 function RegistrationForm () {
   const [captchaToken, setcaptchaToken] = useState('')
+  const [isPopOverVisible, setIsPopOverVisible] = useState(false)
   const navigate = useNavigate()
 
   const notify = () => {
@@ -77,13 +80,12 @@ function RegistrationForm () {
           ...values,
           fecha_inscripcion: new Date().toISOString()
         })
+        actions.resetForm()
       } else {
         errorNotify('Captcha no resulto 😐')
         setcaptchaToken(null)
       }
     }
-
-    actions.resetForm()
   }
 
   const onChange = (token) => {
@@ -107,9 +109,11 @@ function RegistrationForm () {
     >
       {({ isSubmitting }) => (
         <Form className='w-[550px] bg-slate-800 p-4 rounded-md'>
-          <h1 className='font-bold mb-3'>
-            Registro <span className='text-sm'>poesia</span>
-          </h1>
+          <div className='flex justify-center items-center gap-x-1'>
+            <h1 className='font-bold mb-3 '>Registro</h1>
+            <span className='text-sm'>poesia</span>
+            <Exclamations setIsPopOverVisible={setIsPopOverVisible} />
+          </div>
 
           <div className='flex flex-row justify-center gap-2'>
             <CustomInput
@@ -118,6 +122,8 @@ function RegistrationForm () {
               type='text'
               placeholder='Introduce tu carnet'
             />
+
+            <PopOver isPopOverVisible={isPopOverVisible} />
 
             <CustomInput
               label='Teléfono'

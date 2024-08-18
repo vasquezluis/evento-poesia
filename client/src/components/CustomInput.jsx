@@ -6,9 +6,10 @@ function CustomInput ({ label, ...props }) {
   return (
     <div className='flex flex-col justify-start w-full'>
       <label
-        className='block mb-2 text-sm font-medium text-gray-900 dark:text-white text-start'
+        className='flex flex-row gap-x-1 justify-start items-center mb-2 text-sm font-medium text-gray-900 dark:text-white'
         htmlFor=''
-      >{label}
+      >
+        {label}
       </label>
       <input
         {...field}
