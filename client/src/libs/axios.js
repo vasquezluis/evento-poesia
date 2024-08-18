@@ -5,7 +5,8 @@ import axios from 'axios'
 // const { token } = useSelector((state) => state.user);
 
 const authAPI = axios.create({
-  baseURL: 'http://localhost:3000/api/v1',
+  // baseURL: 'http://localhost:3000/api/v1',
+  baseURL: 'https://evento-poesia.onrender.com/api/v1',
   withCredentials: true
 })
 
